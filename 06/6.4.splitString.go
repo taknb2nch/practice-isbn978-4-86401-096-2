@@ -1,6 +1,7 @@
 package main
 
 import (
+	// go get code.google.com/p/go.exp/
 	"code.google.com/p/go.exp/utf8string"
 	"fmt"
 	"strings"
