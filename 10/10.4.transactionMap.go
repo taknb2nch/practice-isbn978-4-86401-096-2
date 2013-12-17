@@ -69,56 +69,44 @@ func main() {
 
 	go runMap(m)
 
-	// set(m, 1, "foo")
-	// set(m, 2, "bar")
-	// set(m, 3, "hoge")
-
-	// t := beginTransaction(m)
-
-	// // set(t, 1, "foo")
-	// // set(t, 2, "bar")
-	// // set(t, 3, "hoge")
-
-	// s := get(t, 2)
-
-	// fmt.Println(s)
-
-	// set(t, 2, "あああああ")
-
-	// endTransaction(t)
-
-	// fmt.Printf("Set %s\n", get(m, 1))
-	// fmt.Printf("Set %s\n", get(m, 2))
-
-	// fmt.Printf("Set %s\n", get(m, 3))
-
 	go go1(m)
 	go go2(m)
 
 	time.Sleep(10 * time.Second)
 
+	fmt.Println("push any key!")
+	var s string
+	fmt.Scanf("%s\n", &s)
 }
 
 func go1(r chan Request) {
-	set(r, 1, "foo")
-	set(r, 2, "bar")
-	set(r, 3, "hoge")
+	t := beginTransaction(r)
 
-	fmt.Printf("go1 %s\n", get(r, 1))
-	fmt.Printf("go1 %s\n", get(r, 2))
-	fmt.Printf("go1 %s\n", get(r, 3))
+	set(t, 1, "foo")
+	set(t, 2, "bar")
+	set(t, 3, "hoge")
+
+	fmt.Printf("go1 %s\n", get(t, 1))
+	fmt.Printf("go1 %s\n", get(t, 2))
+	fmt.Printf("go1 %s\n", get(t, 3))
 
 	time.Sleep(2 * time.Second)
 
-	fmt.Printf("go1 %s\n", get(r, 1))
-	fmt.Printf("go1 %s\n", get(r, 2))
-	fmt.Printf("go1 %s\n", get(r, 3))
+	fmt.Printf("go1 %s\n", get(t, 1))
+	fmt.Printf("go1 %s\n", get(t, 2))
+	fmt.Printf("go1 %s\n", get(t, 3))
+
+	endTransaction(t)
 
 	time.Sleep(5 * time.Second)
 
-	fmt.Printf("go1 %s\n", get(r, 1))
-	fmt.Printf("go1 %s\n", get(r, 2))
-	fmt.Printf("go1 %s\n", get(r, 3))
+	t = beginTransaction(r)
+
+	fmt.Printf("go1 %s\n", get(t, 1))
+	fmt.Printf("go1 %s\n", get(t, 2))
+	fmt.Printf("go1 %s\n", get(t, 3))
+
+	endTransaction(t)
 }
 
 func go2(r chan Request) {
@@ -133,7 +121,7 @@ func go2(r chan Request) {
 
 	set(t, 2, "あああああ")
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(3 * time.Second)
 
 	endTransaction(t)
 }
